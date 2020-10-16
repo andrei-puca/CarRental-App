@@ -4,10 +4,11 @@ using System.Text;
 
 namespace CarRental.API.DAL.Entities
 {
-    public class TodoItem
+    public class ClientsItem
     {
         public int Id { get; set; }
-        
-        public string Name { get; set; }
+
+        public string FullName { get; set; }
+
     }
 }

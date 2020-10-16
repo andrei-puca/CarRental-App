@@ -18,14 +18,15 @@ namespace CarRental.API.DAL.DataServices
             _options = databaseOptions.Value;
         }
 
-
         protected SqlConnection GetOpenConnection()
         {
+
             return SqlConnectionProvider.GetConnection(_options.ConnectionString);
         }
 
         protected async Task<SqlConnection> GetOpenConnectionAsync()
         {
+            
             return await SqlConnectionProvider.GetConnectionAsync(_options.ConnectionString);
         }
               

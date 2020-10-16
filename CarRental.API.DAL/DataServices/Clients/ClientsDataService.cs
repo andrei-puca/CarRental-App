@@ -9,13 +9,13 @@ using System.Data;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CarRental.API.DAL.DataServices.Todo
+namespace CarRental.API.DAL.DataServices.Clients
 {
-    public class TodoDataService : BaseDataService, ITodoDataService
+    public class ClientsDataService : BaseDataService , IClientsDataService
     {
-        private const string SpReadAll = "dbo.GET_ALL";
+        private const string SpReadAll = "dbo.GetClients";
 
-        public TodoDataService(IOptions<DatabaseOptions> databaseOptions)
+        public ClientsDataService(IOptions<DatabaseOptions> databaseOptions)
             : base(databaseOptions)
         {
         }
@@ -23,25 +23,26 @@ namespace CarRental.API.DAL.DataServices.Todo
         /// <summary>
         /// Dapper.FastCrud example
         /// </summary>
-        public async Task<TodoItem> GetAsync(int id)
+        public async Task<ClientsItem> GetAsync(int id)
         {
             using (var conn = await GetOpenConnectionAsync())
             {
-                return await conn.GetAsync(new TodoItem() { Id = id });
+                return await conn.GetAsync(new ClientsItem() { Id = id });
             }
         }
 
         /// <summary>
         /// Dapper with stored procedure
         /// </summary>
-        public async Task<IEnumerable<TodoItem>> GetAllAsync()
+        public async Task<IEnumerable<ClientsItem>> GetAllAsync()
         {
             using (var conn = await GetOpenConnectionAsync())
             {
-                return await conn.QueryAsync<TodoItem>(
+                return await conn.QueryAsync<ClientsItem>(
                     sql: SpReadAll,
                     commandType: CommandType.StoredProcedure);
             }
         }
+
     }
 }

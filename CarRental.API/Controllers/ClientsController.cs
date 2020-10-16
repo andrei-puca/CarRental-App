@@ -6,25 +6,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CarRental.API.BL.Services.Clients;
+using CarRental.API.BL.Models.Clients;
 
 namespace CarRental.API.Controllers
 {
-    public class ToDoController : ControllerBase
+    
+    [ApiController]
+    [Route("[controller]")]
+    public class ClientsController : ControllerBase
     {
-        private readonly ITodoService _todoService;
+        private readonly IClientsService _todoService;
 
-        public ToDoController(ITodoService todoService)
+        public ClientsController(IClientsService todoService)
         {
             _todoService = todoService;
         }
 
-        
+
         [HttpGet]
+        [Route("GetAllClients")]
         /// <summary>
         /// Get a list of items
         /// </summary>
         /// <returns>List with TodoModels</returns>
-        public virtual async Task<IEnumerable<TodoModel>> GetAll()
+        public virtual async Task<IEnumerable<ClientsModel>> GetAllClients()
         {
             return await _todoService.GetAllAsync();
         }
@@ -38,14 +44,21 @@ namespace CarRental.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public virtual async Task<ActionResult<TodoModel>> GetOne(int id)
+        public virtual async Task<ActionResult<ClientsModel>> GetOneClient(int id)
         {
-            var item = await _todoService.GetAsync(id);
-            if (item is null)
+            try
             {
-                return NotFound();
+                var item = await _todoService.GetAsync(id);
+                if (item is null)
+                {
+                    return NotFound();
+                }
+                return item;
             }
-            return item;
+            catch(Exception ex)
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -56,7 +69,7 @@ namespace CarRental.API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesDefaultResponseType]
-        public virtual async Task<ActionResult<int>> CreateOne(TodoModel item)
+        public virtual async Task<ActionResult<int>> CreateOneClient(ClientsModel item)
         {
             return await _todoService.CreateAsync(item);
         }
@@ -70,7 +83,7 @@ namespace CarRental.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public virtual async Task<ActionResult<int>> Update(TodoModel item)
+        public virtual async Task<ActionResult<int>> UpdateClient(ClientsModel item)
         {
             var updateItemId = await _todoService.UpsertAsync(item);
             return Ok(updateItemId);
@@ -84,7 +97,7 @@ namespace CarRental.API.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public virtual async Task<ActionResult<bool>> Delete(Guid id)
+        public virtual async Task<ActionResult<bool>> DeleteClient(Guid id)
         {
             await _todoService.DeleteAsync(id);
             return NoContent();
