@@ -11,5 +11,9 @@ namespace CarRental.API.BL.Models
         public string Brand { get; set; }
 
         public string Model { get; set; }
+
+        public int Mileage { get; set; }
+
+        public bool IsAvailable { get; set; }
     }
 }

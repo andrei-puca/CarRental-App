@@ -1,4 +1,5 @@
 ﻿using CarRental.API.BL.Models;
+using CarRental.API.BL.Models.Car;
 using CarRental.API.DAL.Entities;
 using System;
 using System.Collections.Generic;
@@ -13,10 +14,12 @@ namespace CarRental.API.BL.Services
         
         Task<CarModel> GetAsync(Guid id);
         
-        Task<CarItem> CreateAsync(CarModel item);
-        
-        Task<CarItem> UpsertAsync(CarModel item);
-        
+        Task<CarItem> CreateAsync(CreateCarModel item);
+
+        Task<IEnumerable<CarItem>> UpsertAsync(CarModel item);
+
+        Task<IEnumerable<CarItem>> MarkCarAsAvailable(CarAvailabilityModel item);
+
         Task<CarItem> DeleteAsync(Guid id);
     }
 }

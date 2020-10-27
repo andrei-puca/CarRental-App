@@ -1,5 +1,6 @@
 ﻿using CarRental.API.BL.Models;
 using CarRental.API.BL.Models.Clients;
+using CarRental.API.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,13 +12,13 @@ namespace CarRental.API.BL.Services.Clients
     {
         Task<IEnumerable<ClientsModel>> GetAllAsync();
 
-        Task<ClientsModel> GetAsync(int id);
+        Task<ClientsModel> GetAsync(Guid id);
 
-        Task<int> CreateAsync(ClientsModel item);
+        Task<ClientsItem> CreateAsync(CreateClientModel item);
 
-        Task<int> UpsertAsync(ClientsModel item);
+        Task<ClientsItem> UpsertAsync(UpdateClientModel item);
 
-        Task DeleteAsync(Guid id);
+        Task<ClientsItem> DeleteAsync(Guid id);
 
     }
 }

@@ -1,39 +1,37 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CarRental.API.BL.Models.Prices;
+using CarRental.API.BL.Services.Prices;
+using CarRental.API.DAL.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using CarRental.API.BL.Models;
-using CarRental.API.BL.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CarRental.API.BL.Services.Clients;
-using CarRental.API.BL.Models.Clients;
-using CarRental.API.DAL.Entities;
 
 namespace CarRental.API.Controllers
 {
-
     [ApiController]
     [Route("[controller]")]
-    public class ClientsController : ControllerBase
+    public class PriceController : ControllerBase
     {
-        private readonly IClientsService _clientService;
+        private readonly IPriceService _priceService;
 
-        public ClientsController(IClientsService clientService)
+        public PriceController(IPriceService priceService)
         {
-            _clientService = clientService;
+            _priceService = priceService;
         }
 
 
         [HttpGet]
-        [Route("GetAllClients")]
+        [Route("GetAllPrices")]
         /// <summary>
         /// Get a list of items
         /// </summary>
         /// <returns>List with TodoModels</returns>
-        public virtual async Task<IEnumerable<ClientsModel>> GetAllClients()
+        public virtual async Task<IEnumerable<PriceModel>> GetAllPrices()
         {
-            return await _clientService.GetAllAsync();
+          
+            return await _priceService.GetAllAsync();
         }
 
         /// <summary>
@@ -41,14 +39,14 @@ namespace CarRental.API.Controllers
         /// </summary>
         /// <param name="id">id of the item you want to get</param>
         /// <returns>Item or StatusCode 404</returns>
-        [HttpGet("GetClient/{id}")]
+        [HttpGet("GetPrice/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public virtual async Task<ActionResult<ClientsModel>> GetOneClient(Guid id)
+        public virtual async Task<ActionResult<PriceModel>> GetOnePrice(Guid id)
         {
 
-            var item = await _clientService.GetAsync(id);
+            var item = await _priceService.GetAsync(id);
             if (item is null)
             {
                 return NotFound();
@@ -57,18 +55,18 @@ namespace CarRental.API.Controllers
 
         }
 
+
         /// <summary>
         /// Add an item
         /// </summary>
         /// <param name="item">Model to add, id will be ignored</param>
         /// <returns>Id of created item</returns>
-        [Route("CreateClient")]
-        [HttpPost]
+        [HttpPost("AddPrice")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesDefaultResponseType]
-        public virtual async Task<ClientsItem> CreateOneClient(CreateClientModel item)
+        public virtual async Task<PriceItem> CreateOnePrice(CreatePriceModel item)
         {
-            return await _clientService.CreateAsync(item);
+            return await _priceService.CreateAsync(item);
         }
 
         /// <summary>
@@ -76,14 +74,13 @@ namespace CarRental.API.Controllers
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        [Route("UpdateClient")]
-        [HttpPut]
+        [HttpPut("UpdatePrice")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public virtual async Task<ActionResult<int>> Update(UpdateClientModel item)
+        public virtual async Task<ActionResult<int>> UpdatePrice(PriceModel item)
         {
-            var updateItemId = await _clientService.UpsertAsync(item);
+            var updateItemId = await _priceService.UpsertAsync(item);
             return Ok(updateItemId);
         }
 
@@ -92,13 +89,15 @@ namespace CarRental.API.Controllers
         /// </summary>
         /// <param name="id">Id of the item to delete</param>
         /// <returns>StatusCode 200 or 404</returns>
-        [HttpDelete("DeleteClient/{id}")]
+        [HttpDelete("DeletePrice/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public virtual async Task<ActionResult<bool>> Delete(Guid id)
+        public virtual async Task<ActionResult<bool>> DeletePrice(Guid id)
         {
-            var deletedItem = await _clientService.DeleteAsync(id);
-            return Ok(deletedItem);
+            await _priceService.DeleteAsync(id);
+            return NoContent();
         }
+
+
     }
 }

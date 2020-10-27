@@ -8,8 +8,15 @@ namespace CarRental.API.DAL.DataServices.Clients
 {
     public interface IClientsDataService
     {
-        Task<ClientsItem> GetAsync(int id);
+        Task<ClientsItem> GetAsync(Guid id);
+
         Task<IEnumerable<ClientsItem>> GetAllAsync();
+
+        Task<ClientsItem> CreateAsync(ClientsItem car);
+
+        Task<ClientsItem> DeleteAsync(Guid Id);
+
+        Task<ClientsItem> UpsertAsync(ClientsItem car);
 
     }
 }

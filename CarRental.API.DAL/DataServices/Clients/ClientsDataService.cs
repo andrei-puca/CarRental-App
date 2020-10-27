@@ -23,7 +23,7 @@ namespace CarRental.API.DAL.DataServices.Clients
         /// <summary>
         /// Dapper.FastCrud example
         /// </summary>
-        public async Task<ClientsItem> GetAsync(int id)
+        public async Task<ClientsItem> GetAsync(Guid id)
         {
             using (var conn = await GetOpenConnectionAsync())
             {
@@ -43,6 +43,37 @@ namespace CarRental.API.DAL.DataServices.Clients
                     commandType: CommandType.StoredProcedure);
             }
         }
+
+        public async Task<ClientsItem> CreateAsync(ClientsItem client)
+        {
+
+            using (var conn = await GetOpenConnectionAsync())
+            {
+                client.Id = Guid.NewGuid();
+                conn.Insert(client);
+            }
+            return client;
+        }
+
+        public async Task<ClientsItem> DeleteAsync(Guid id)
+        {
+            using (var conn = await GetOpenConnectionAsync())
+            {
+                conn.Delete<ClientsItem>(new ClientsItem { Id = id });
+            }
+            return null;
+        }
+
+        public async Task<ClientsItem> UpsertAsync(ClientsItem client)
+        {
+            using (var conn = await GetOpenConnectionAsync())
+            {
+                conn.Update<ClientsItem>(client);
+            }
+            return null;
+        }
+
+
 
     }
 }

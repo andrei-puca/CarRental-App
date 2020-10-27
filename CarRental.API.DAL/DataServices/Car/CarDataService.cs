@@ -8,12 +8,15 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace CarRental.API.DAL.DataServices.Car
 {
     public class CarDataService : BaseDataService, ICarDataService
     {
         private const string SpReadAll = "dbo.GetMyCars";
+        private const string SpUpdate = "UpdateCar";
+        private const string SpMarkAvailability = "MarkCarAsReceived";
 
         public CarDataService(IOptions<DatabaseOptions> databaseOptions)
             : base(databaseOptions)
@@ -50,6 +53,9 @@ namespace CarRental.API.DAL.DataServices.Car
             using (var conn = await GetOpenConnectionAsync())
             {
                 car.Id = Guid.NewGuid();
+                car.CreatedOn = DateTime.Now;
+                car.UpdatedOn = DateTime.Now;
+
                 conn.Insert(car);
             }
             return car;
@@ -64,13 +70,44 @@ namespace CarRental.API.DAL.DataServices.Car
             return null;
         }
 
-        public async Task<CarItem> UpsertAsync(CarItem car)
+        public async Task<IEnumerable<CarItem>> UpsertAsync(CarItem car)
         {
             using (var conn = await GetOpenConnectionAsync())
             {
-                conn.Update<CarItem>(car);
+                return await conn.QueryAsync<CarItem>(
+                     param: new
+                     {
+                         Id = car.Id,
+                         Brand = car.Brand,
+                         Model = car.Model,
+                     },
+                    sql: SpUpdate,
+                    commandType: CommandType.StoredProcedure);
             }
-            return null;
+           
+        }
+
+        public async Task<IEnumerable<CarItem>> MarkCarAsAvailable(CarItem car)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("MileageUntilService", dbType: DbType.Int64, direction: ParameterDirection.Output);
+            using (var conn = await GetOpenConnectionAsync())
+            {
+                
+
+                return await conn.QueryAsync<CarItem>(
+                     param: new
+                     {
+                         Id = car.Id,
+                         Mileage = car.Mileage,
+                     },
+                    sql: SpMarkAvailability,
+                    commandType: CommandType.StoredProcedure);                
+            }
+
+            car.MileageUntilService = parameters.Get<int>("MileageUntilService");
+
+
         }
 
 

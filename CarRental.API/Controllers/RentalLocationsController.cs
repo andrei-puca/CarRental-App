@@ -1,38 +1,36 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CarRental.API.BL.Services.RentalLocations;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using CarRental.API.BL.Models;
-using CarRental.API.BL.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CarRental.API.BL.Models.RentalLocations;
 using CarRental.API.DAL.Entities;
-using CarRental.API.BL.Models.Car;
 
 namespace CarRental.API.Controllers
 {
-    
     [ApiController]
     [Route("[controller]")]
-    public class CarController : ControllerBase
+    public class RentalLocationsController : ControllerBase
     {
-        private readonly ICarService _carService;
+        private readonly IRentalLocationService _rentalLocationService;
 
-        public CarController(ICarService carService)
+        public RentalLocationsController(IRentalLocationService rentalLocationService)
         {
-            _carService = carService;
+            _rentalLocationService = rentalLocationService;
         }
 
-        
+
         [HttpGet]
-        [Route("GetAllCars")]
+        [Route("GetAllRentalLocations")]
         /// <summary>
         /// Get a list of items
         /// </summary>
         /// <returns>List with TodoModels</returns>
-        public virtual async Task<IEnumerable<CarModel>> GetAll()
+        public virtual async Task<IEnumerable<RentalLocationModel>> GetAllRentalLocations()
         {
-            return await _carService.GetAllAsync();
+            return await _rentalLocationService.GetAllAsync();        
         }
 
         /// <summary>
@@ -40,18 +38,20 @@ namespace CarRental.API.Controllers
         /// </summary>
         /// <param name="id">id of the item you want to get</param>
         /// <returns>Item or StatusCode 404</returns>
-        [HttpGet("GetCar/{id}")]
+        [HttpGet("GetRentalLocation/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public virtual async Task<ActionResult<CarModel>> GetOne(Guid id)
+        public virtual async Task<ActionResult<RentalLocationModel>> GetOneRentalLocation(Guid id)
         {
-                var item = await _carService.GetAsync(id);
-                if (item is null)
-                {
-                    return NotFound();
-                }
-                return item;
+
+            var item = await _rentalLocationService.GetAsync(id);
+            if (item is null)
+            {
+                return NotFound();
+            }
+            return item;
+
         }
 
         /// <summary>
@@ -59,13 +59,13 @@ namespace CarRental.API.Controllers
         /// </summary>
         /// <param name="item">Model to add, id will be ignored</param>
         /// <returns>Id of created item</returns>
+        [Route("CreateRentalLocation")]
         [HttpPost]
-        [Route("AddCar")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesDefaultResponseType]
-        public virtual async Task<CarItem> CreateOne(CreateCarModel item)
+        public virtual async Task<RentalLocationItem> CreateOneRentalLocation(CreateRentalLocationModel item)
         {
-            return await _carService.CreateAsync(item);
+            return await _rentalLocationService.CreateAsync(item);
         }
 
         /// <summary>
@@ -73,13 +73,14 @@ namespace CarRental.API.Controllers
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        [HttpPut("UpdateCar")]
+        [Route("UpdateRentalLocation")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public virtual async Task<ActionResult<int>> Update(CarModel item)
+        public virtual async Task<ActionResult<int>> UpdateRentalLocation(RentalLocationModel item)
         {
-            var updateItemId = await _carService.UpsertAsync(item);
+            var updateItemId = await _rentalLocationService.UpsertAsync(item);
             return Ok(updateItemId);
         }
 
@@ -88,25 +89,14 @@ namespace CarRental.API.Controllers
         /// </summary>
         /// <param name="id">Id of the item to delete</param>
         /// <returns>StatusCode 200 or 404</returns>
-        [HttpDelete("DeleteCar/{id}")]
+        [HttpDelete("DeleteRentalLocation/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public virtual async Task<ActionResult<bool>> Delete(Guid id)
+        public virtual async Task<ActionResult<bool>> DeleteRentalLocation(Guid id)
         {
-            var deletedItem = await _carService.DeleteAsync(id);
+            var deletedItem = await _rentalLocationService.DeleteAsync(id);
             return Ok(deletedItem);
         }
-
-        [HttpPut("MarkCarAsAvailable")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesDefaultResponseType]
-        public virtual async Task<ActionResult<int>> MarkCarAsAvailable(CarAvailabilityModel item)
-        {
-            var updateItemId = await _carService.MarkCarAsAvailable(item);
-            return Ok(updateItemId);
-        }
-
 
     }
 }

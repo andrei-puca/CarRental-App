@@ -16,6 +16,8 @@ namespace CarRental.API.DAL.DataServices.Car
 
         Task<CarItem> DeleteAsync(Guid Id);
 
-        Task<CarItem> UpsertAsync(CarItem car);
+        Task<IEnumerable<CarItem>> UpsertAsync(CarItem car);
+
+        Task<IEnumerable<CarItem>> MarkCarAsAvailable(CarItem car);
     }
 }

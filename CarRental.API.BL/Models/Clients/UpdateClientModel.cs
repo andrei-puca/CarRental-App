@@ -4,11 +4,9 @@ using System.Text;
 
 namespace CarRental.API.BL.Models.Clients
 {
-    public class ClientsModel
+    public class UpdateClientModel
     {
         public Guid Id { get; set; }
-        
         public string FullName { get; set; }
-
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarRental.API.BL.Models;
+using CarRental.API.BL.Models.Car;
 using CarRental.API.DAL.DataServices.Car;
 using CarRental.API.DAL.Entities;
 using System;
@@ -32,22 +33,30 @@ namespace CarRental.API.BL.Services
             return _mapper.Map<CarModel>(car);
         }
 
-        public async Task<CarItem> CreateAsync(CarModel item)
+        public async Task<CarItem> CreateAsync(CreateCarModel item)
         {
             var car = _mapper.Map<CarItem>(item);
             return await _carDataService.CreateAsync(car);
           
         }
 
-        public async Task<CarItem> UpsertAsync(CarModel item)
+        public async Task<IEnumerable<CarItem>> UpsertAsync(CarModel item)
         {
             var car = _mapper.Map<CarItem>(item);
             return await _carDataService.UpsertAsync(car);
         }
         
+
         public async Task<CarItem> DeleteAsync(Guid id)
         {
             return await _carDataService.DeleteAsync(id);
         }
+    
+        public async Task<IEnumerable<CarItem>> MarkCarAsAvailable(CarAvailabilityModel item)
+        {
+            var car = _mapper.Map<CarItem>(item);
+            return await _carDataService.MarkCarAsAvailable(car);
+        }
+    
     }
 }
