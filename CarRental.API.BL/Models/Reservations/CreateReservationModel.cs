@@ -19,5 +19,7 @@ namespace CarRental.API.BL.Models.Reservations
 
         public Guid DropOffLocation { get; set; }
 
+        public int TotalPrice { get; set; }
+
     }
 }

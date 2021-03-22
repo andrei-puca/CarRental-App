@@ -34,6 +34,15 @@ namespace CarRental.API.Controllers
             return await _priceService.GetAllAsync();
         }
 
+        [HttpGet]
+        [Route("GetDetailedPrices")]
+        public virtual async Task<IEnumerable<DetailedPrices>> GetDetailedPrices()
+        {
+            return await _priceService.GetDetailedPrices();
+        }
+
+
+
         /// <summary>
         /// Get an item by its id.
         /// </summary>

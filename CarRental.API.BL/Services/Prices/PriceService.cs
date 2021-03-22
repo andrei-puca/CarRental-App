@@ -27,6 +27,13 @@ namespace CarRental.API.BL.Services.Prices
             return _mapper.Map<IEnumerable<PriceModel>>(prices);
         }
 
+        public async Task<IEnumerable<DetailedPrices>> GetDetailedPrices()
+        {
+            var prices = await _priceDataService.GetDetailedPrices();
+            return _mapper.Map<IEnumerable<DetailedPrices>>(prices);
+        }
+
+
         public async Task<PriceModel> GetAsync(Guid id)
         {
             var price = await _priceDataService.GetAsync(id);

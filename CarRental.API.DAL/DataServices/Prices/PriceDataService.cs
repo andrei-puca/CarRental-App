@@ -1,5 +1,6 @@
 ﻿using CarRental.API.Common.SettingsOptions;
 using CarRental.API.DAL.Entities;
+using CarRental.API.DAL.CustomEntities;
 using Dapper;
 using Dapper.FastCrud;
 using Microsoft.Extensions.Options;
@@ -15,6 +16,7 @@ namespace CarRental.API.DAL.DataServices.Prices
     {
         private const string SpReadAll = "dbo.GetAllPrices";
         private const string GetCarPrice = "dbo.GetPriceForSelectedCar";
+        private const string ReadDetailedPrices = "dbo.GetDetailedPrices";
 
         public PriceDataService(IOptions<DatabaseOptions> databaseOptions)
             : base(databaseOptions)
@@ -44,6 +46,17 @@ namespace CarRental.API.DAL.DataServices.Prices
                     sql: SpReadAll,
                     commandType: CommandType.StoredProcedure);
             }
+        }
+
+        public async Task<IEnumerable<DetailedPriceItem>> GetDetailedPrices()
+        {
+            using (var conn = await GetOpenConnectionAsync())
+            {
+                return await conn.QueryAsync<DetailedPriceItem>(
+                    sql: ReadDetailedPrices,
+                    commandType: CommandType.StoredProcedure);
+            }
+
         }
         
         public async Task<IEnumerable<PriceItem>> GetCarPriceAsync(Guid id)

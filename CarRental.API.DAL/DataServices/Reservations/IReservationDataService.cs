@@ -1,4 +1,5 @@
 ﻿using CarRental.API.DAL.Entities;
+using CarRental.API.DAL.CustomEntities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,6 +12,8 @@ namespace CarRental.API.DAL.DataServices.Reservations
         Task<ReservationItem> GetAsync(Guid id);
 
         Task<IEnumerable<ReservationItem>> GetAllAsync();
+
+        Task<IEnumerable<DetailedReservations>> GetDetailedReservations();
 
         Task<IEnumerable<ReservationItem>> CreateAsync (ReservationItem reservation);
 

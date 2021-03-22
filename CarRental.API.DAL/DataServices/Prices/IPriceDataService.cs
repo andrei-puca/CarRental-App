@@ -1,4 +1,5 @@
 ﻿using CarRental.API.DAL.Entities;
+using CarRental.API.DAL.CustomEntities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,6 +12,8 @@ namespace CarRental.API.DAL.DataServices.Prices
         Task<PriceItem> GetAsync(Guid id);
 
         Task<IEnumerable<PriceItem>> GetAllAsync();
+
+        Task<IEnumerable<DetailedPriceItem>> GetDetailedPrices();
 
         Task<IEnumerable<PriceItem>> GetCarPriceAsync(Guid id);
 

@@ -13,6 +13,8 @@ namespace CarRental.API.BL.Services.Reservation
 
         Task<IEnumerable<ReservationModel>> GetAllAsync();
 
+        Task<IEnumerable<DetailedReservationModel>> GetDetailedReservations();
+
         Task<ReservationModel> GetAsync(Guid id);
 
         Task<IEnumerable<ReservationItem>> CreateAsync(CreateReservationModel item);

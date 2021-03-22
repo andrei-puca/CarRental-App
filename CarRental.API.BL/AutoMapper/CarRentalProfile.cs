@@ -6,6 +6,7 @@ using CarRental.API.BL.Models.Prices;
 using CarRental.API.BL.Models.RentalLocations;
 using CarRental.API.BL.Models.Reservations;
 using CarRental.API.DAL.Entities;
+using CarRental.API.DAL.CustomEntities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,6 +32,8 @@ namespace CarRental.API.BL.AutoMapper
             CreateMap<ReservationItem, UpdateReservationModel>().ReverseMap();
             CreateMap<RentalLocationItem, RentalLocationModel>().ReverseMap();
             CreateMap<RentalLocationItem, CreateRentalLocationModel>().ReverseMap();
+            CreateMap<DetailedReservations, DetailedReservationModel>().ReverseMap();
+            CreateMap<DetailedPrices, DetailedPriceItem>().ReverseMap();
         }
     }
 }

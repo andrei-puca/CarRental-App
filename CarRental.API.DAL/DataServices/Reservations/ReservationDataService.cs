@@ -1,5 +1,6 @@
 ﻿using CarRental.API.Common.SettingsOptions;
 using CarRental.API.DAL.Entities;
+using CarRental.API.DAL.CustomEntities;
 using Dapper;
 using Dapper.FastCrud;
 using Microsoft.Extensions.Options;
@@ -17,6 +18,7 @@ namespace CarRental.API.DAL.DataServices.Reservations
         private const string SpCreateWithNewClient = "CreateReservationWithNewClient";
         private const string SpReadAll = "GetReservations";
         private const string SpUpdate = "UpdateReservation";
+        private const string ReadDetailedReservations = "GetDetailedReservations";
 
         public ReservationDataService(IOptions<DatabaseOptions> databaseOptions)
            : base(databaseOptions)
@@ -83,6 +85,17 @@ namespace CarRental.API.DAL.DataServices.Reservations
                     commandType: CommandType.StoredProcedure);
             }
         }
+
+        public async Task<IEnumerable<DetailedReservations>> GetDetailedReservations()
+        {
+            using (var conn = await GetOpenConnectionAsync())
+            {
+                return await conn.QueryAsync<DetailedReservations>(
+                    sql: ReadDetailedReservations,
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
 
         public async Task<ReservationItem> GetAsync(Guid id)
         {

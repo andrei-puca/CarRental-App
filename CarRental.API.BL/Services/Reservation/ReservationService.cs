@@ -48,6 +48,13 @@ namespace CarRental.API.BL.Services.Reservation
             return _mapper.Map<IEnumerable<ReservationModel>>(reservations);
         }
 
+        public async Task<IEnumerable<DetailedReservationModel>> GetDetailedReservations()
+        {
+            var reservations = await _reservationDataService.GetDetailedReservations();
+            return _mapper.Map<IEnumerable<DetailedReservationModel>>(reservations);
+        }
+
+
         public async Task<ReservationModel> GetAsync(Guid id)
         {
             var reservation = await _reservationDataService.GetAsync(id);

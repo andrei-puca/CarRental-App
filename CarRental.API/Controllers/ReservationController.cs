@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace CarRental.API.Controllers
 {
-    
+    [ApiController]
     [Route("[controller]")]
     public class ReservationController : ControllerBase
     {
@@ -32,14 +32,14 @@ namespace CarRental.API.Controllers
             return await _reservationService.CreateAsync(item);
         }
 
-        [HttpPost]
-        [Route("CreateReservationWithNewClient")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesDefaultResponseType]
-        public virtual async Task<IEnumerable<ReservationItem>> CreateOneReservationWithNewClient(CreateReservationWithNewClientModel item, CreateClientModel client)
-        {
-            return await _reservationService.CreateAsyncWithNewCustomer(item, client);
-        }
+        //[HttpPost]
+        //[Route("CreateReservationWithNewClient")]
+        //[ProducesResponseType(StatusCodes.Status201Created)]
+        //[ProducesDefaultResponseType]
+        //public virtual async Task<IEnumerable<ReservationItem>> CreateOneReservationWithNewClient(CreateReservationWithNewClientModel item, CreateClientModel client)
+        //{
+        //    return await _reservationService.CreateAsyncWithNewCustomer(item, client);
+        //}
 
 
         [HttpGet]
@@ -51,6 +51,14 @@ namespace CarRental.API.Controllers
         public virtual async Task<IEnumerable<ReservationModel>> GetAllReservations()
         {
             return await _reservationService.GetAllAsync();
+        }
+
+
+        [HttpGet]
+        [Route("GetReservationsDetailed")]
+        public virtual async Task<IEnumerable<DetailedReservationModel>> GetDetailedreservations()
+        {
+            return await _reservationService.GetDetailedReservations();
         }
 
         /// <summary>
