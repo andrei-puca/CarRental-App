@@ -35,6 +35,31 @@ namespace CarRental.API.Controllers
             return await _carService.GetAllAsync();
         }
 
+        [HttpGet]
+        [Route("RentedCars")]
+        /// <summary>
+        /// Get a list of items
+        /// </summary>
+        /// <returns>List with TodoModels</returns>
+        public virtual async Task<IEnumerable<CarModel>> GetRentedCars()
+        {
+            return await _carService.GetRentedCarsAsync();
+        }
+
+
+        [HttpGet]
+        [Route("AvailableCars")]
+        /// <summary>
+        /// Get a list of items
+        /// </summary>
+        /// <returns>List with TodoModels</returns>
+        public virtual async Task<IEnumerable<CarModel>> GetAvailableCars()
+        {
+            return await _carService.GetAvailableCarsAsync();
+        }
+
+
+
         /// <summary>
         /// Get an item by its id.
         /// </summary>
@@ -97,6 +122,7 @@ namespace CarRental.API.Controllers
             return Ok(deletedItem);
         }
 
+
         [HttpPut("MarkCarAsAvailable")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -104,6 +130,7 @@ namespace CarRental.API.Controllers
         public virtual async Task<ActionResult<int>> MarkCarAsAvailable(CarAvailabilityModel item)
         {
             var updateItemId = await _carService.MarkCarAsAvailable(item);
+
             return Ok(updateItemId);
         }
 

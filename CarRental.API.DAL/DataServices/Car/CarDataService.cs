@@ -16,6 +16,8 @@ namespace CarRental.API.DAL.DataServices.Car
     {
         private const string SpReadAll = "dbo.GetMyCars";
         private const string SpUpdate = "UpdateCar";
+        private const string SpReadRentedCars = "GetRentedCars";
+        private const string SpReadAvailableCars = "GetAvailableCars";
         private const string SpMarkAvailability = "MarkCarAsReceived";
 
         public CarDataService(IOptions<DatabaseOptions> databaseOptions)
@@ -47,6 +49,26 @@ namespace CarRental.API.DAL.DataServices.Car
             }
         }
 
+        public async Task<IEnumerable<CarItem>> GetRentedCarsAsync()
+        {
+            using (var conn = await GetOpenConnectionAsync())
+            {
+                return await conn.QueryAsync<CarItem>(
+                    sql: SpReadRentedCars,
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public async Task<IEnumerable<CarItem>> GetAvailableCarsAsync()
+        {
+            using (var conn = await GetOpenConnectionAsync())
+            {
+                return await conn.QueryAsync<CarItem>(
+                    sql: SpReadAvailableCars,
+                    commandType: CommandType.StoredProcedure);
+            }
+        }
+
         public async Task<CarItem> CreateAsync(CarItem car)
         {
 
@@ -65,7 +87,7 @@ namespace CarRental.API.DAL.DataServices.Car
         {
             using (var conn = await GetOpenConnectionAsync())
             {
-                conn.Delete<CarItem>(new CarItem { Id = id});
+                conn.Delete<CarItem>(new CarItem { Id = id });
             }
             return null;
         }
@@ -84,16 +106,16 @@ namespace CarRental.API.DAL.DataServices.Car
                     sql: SpUpdate,
                     commandType: CommandType.StoredProcedure);
             }
-           
+
         }
 
-        public async Task<IEnumerable<CarItem>> MarkCarAsAvailable(CarItem car)
+        public async Task<IEnumerable<CarItem>> MarkCarAsAvailable (CarItem car)
         {
-            var parameters = new DynamicParameters();
-            parameters.Add("MileageUntilService", dbType: DbType.Int64, direction: ParameterDirection.Output);
+            //var parameters = new DynamicParameters();
+            //parameters.Add("MileageUntilService", dbType: DbType.Int64, direction: ParameterDirection.Output);
+
             using (var conn = await GetOpenConnectionAsync())
             {
-                
 
                 return await conn.QueryAsync<CarItem>(
                      param: new
@@ -102,11 +124,8 @@ namespace CarRental.API.DAL.DataServices.Car
                          Mileage = car.Mileage,
                      },
                     sql: SpMarkAvailability,
-                    commandType: CommandType.StoredProcedure);                
+                    commandType: CommandType.StoredProcedure);
             }
-
-            car.MileageUntilService = parameters.Get<int>("MileageUntilService");
-
 
         }
 

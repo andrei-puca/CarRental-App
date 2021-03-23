@@ -24,6 +24,6 @@ namespace CarRental.API.DAL.Entities
 
         public bool IsAvailable { get; set; }
 
-        public int MileageUntilService { get; set; }
+        
     }
 }

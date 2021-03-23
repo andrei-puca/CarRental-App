@@ -27,6 +27,18 @@ namespace CarRental.API.BL.Services
             return _mapper.Map<IEnumerable<CarModel>>(cars);
         }
 
+        public async Task<IEnumerable<CarModel>> GetRentedCarsAsync()
+        {
+            var cars = await _carDataService.GetRentedCarsAsync();
+            return _mapper.Map<IEnumerable<CarModel>>(cars);
+        }
+
+        public async Task<IEnumerable<CarModel>> GetAvailableCarsAsync()
+        {
+            var cars = await _carDataService.GetAvailableCarsAsync();
+            return _mapper.Map<IEnumerable<CarModel>>(cars);
+        }
+
         public async Task<CarModel> GetAsync(Guid id)
         {
             var car = await _carDataService.GetAsync(id);
@@ -52,7 +64,7 @@ namespace CarRental.API.BL.Services
             return await _carDataService.DeleteAsync(id);
         }
     
-        public async Task<IEnumerable<CarItem>> MarkCarAsAvailable(CarAvailabilityModel item)
+        public async Task<IEnumerable<CarItem>> MarkCarAsAvailable (CarAvailabilityModel item)
         {
             var car = _mapper.Map<CarItem>(item);
             return await _carDataService.MarkCarAsAvailable(car);

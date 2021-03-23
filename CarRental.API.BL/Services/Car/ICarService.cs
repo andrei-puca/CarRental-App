@@ -11,14 +11,18 @@ namespace CarRental.API.BL.Services
     public interface ICarService
     {
         Task<IEnumerable<CarModel>> GetAllAsync();
-        
+
+        Task<IEnumerable<CarModel>> GetRentedCarsAsync();
+
+        Task<IEnumerable<CarModel>> GetAvailableCarsAsync();
+
         Task<CarModel> GetAsync(Guid id);
         
         Task<CarItem> CreateAsync(CreateCarModel item);
 
         Task<IEnumerable<CarItem>> UpsertAsync(CarModel item);
 
-        Task<IEnumerable<CarItem>> MarkCarAsAvailable(CarAvailabilityModel item);
+        Task<IEnumerable<CarItem>> MarkCarAsAvailable (CarAvailabilityModel item);
 
         Task<CarItem> DeleteAsync(Guid id);
     }

@@ -12,12 +12,16 @@ namespace CarRental.API.DAL.DataServices.Car
         
         Task<IEnumerable<CarItem>> GetAllAsync();
 
+        Task<IEnumerable<CarItem>> GetRentedCarsAsync();
+
+        Task<IEnumerable<CarItem>> GetAvailableCarsAsync();
+
         Task<CarItem> CreateAsync(CarItem car);
 
         Task<CarItem> DeleteAsync(Guid Id);
 
         Task<IEnumerable<CarItem>> UpsertAsync(CarItem car);
 
-        Task<IEnumerable<CarItem>> MarkCarAsAvailable(CarItem car);
+        Task<IEnumerable<CarItem>> MarkCarAsAvailable (CarItem car);
     }
 }
