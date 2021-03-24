@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarRental.API.BL.Models.CarMaintenance;
+using CarRental.API.DAL.CustomEntities;
 using CarRental.API.DAL.DataServices.CarMaintenance;
 using System;
 using System.Collections.Generic;
@@ -23,8 +24,14 @@ namespace CarRental.API.BL.Services.CarMaintenance
 
         public async Task<IEnumerable<CarMaintenanceModel>> GetCarsForMaintenance()
         {
-            var reservations = await _carMaintenanceDataService.GetCarsForMaintenance();
-            return _mapper.Map<IEnumerable<CarMaintenanceModel>>(reservations);
+            var cars = await _carMaintenanceDataService.GetCarsForMaintenance();
+            return _mapper.Map<IEnumerable<CarMaintenanceModel>>(cars);
+        }
+
+        public async Task<IEnumerable<CarServicesModel>> GetCarLastServiceAsync(Guid id)
+        {
+            var cars = await _carMaintenanceDataService.GetCarLastServiceAsync(id);
+            return _mapper.Map<IEnumerable<CarServicesModel>>(cars);
         }
 
     }

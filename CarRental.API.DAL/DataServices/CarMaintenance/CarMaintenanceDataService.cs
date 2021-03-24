@@ -14,6 +14,7 @@ namespace CarRental.API.DAL.DataServices.CarMaintenance
     {
 
         private const string GetNextCarsToBeMaintained = "GetCarServiceDueDate";
+        private const string SpGetCarLastServiceDate = "GetCarLastServiceDate";
 
         public CarMaintenanceDataService(IOptions<DatabaseOptions> databaseOptions)
            : base(databaseOptions)
@@ -29,6 +30,22 @@ namespace CarRental.API.DAL.DataServices.CarMaintenance
                     commandType: CommandType.StoredProcedure);
             }
         }
+
+        public async Task<IEnumerable<CarsServiceHistory>> GetCarLastServiceAsync(Guid id)
+        {
+            using (var conn = await GetOpenConnectionAsync())
+            {
+                return await conn.QueryAsync<CarsServiceHistory>(
+                     param: new
+                     {
+                         CarId = id,
+                     },
+                    sql: SpGetCarLastServiceDate,
+                    commandType: CommandType.StoredProcedure);
+            }
+
+        }
+
 
     }
 }

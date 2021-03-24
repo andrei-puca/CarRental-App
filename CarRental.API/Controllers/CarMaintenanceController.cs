@@ -6,6 +6,7 @@ using CarRental.API.BL.Models.CarMaintenance;
 using CarRental.API.BL.Services.CarMaintenance;
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace CarRental.API.Controllers
 {
     [ApiController]
@@ -16,7 +17,7 @@ namespace CarRental.API.Controllers
 
         private readonly ICarMaintenanceService _carMaintenanceService;
 
-    
+
         public CarMaintenanceController(ICarMaintenanceService carMaintenanceService)
         {
             _carMaintenanceService = carMaintenanceService;
@@ -32,6 +33,13 @@ namespace CarRental.API.Controllers
         {
             return await _carMaintenanceService.GetCarsForMaintenance();
         }
-       
+
+        [HttpGet]
+        [Route("LastServiceDate")]
+        public virtual async Task<IEnumerable<CarServicesModel>> GetCarLastService(Guid id)
+        {
+            var item = await _carMaintenanceService.GetCarLastServiceAsync(id);
+            return item;
+        }
     }
 }

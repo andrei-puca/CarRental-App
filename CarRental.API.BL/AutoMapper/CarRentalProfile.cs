@@ -36,6 +36,7 @@ namespace CarRental.API.BL.AutoMapper
             CreateMap<DetailedReservations, DetailedReservationModel>().ReverseMap();
             CreateMap<DetailedPrices, DetailedPriceItem>().ReverseMap();
             CreateMap<CarsToBeMaintained, CarMaintenanceModel>().ReverseMap();
+            CreateMap<CarServicesModel, CarsServiceHistory>().ReverseMap();
         }
     }
 }
