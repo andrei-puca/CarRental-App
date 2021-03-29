@@ -1,5 +1,6 @@
 ﻿using CarRental.API.Common.SettingsOptions;
 using CarRental.API.DAL.CustomEntities;
+using CarRental.API.DAL.Entities;
 using Dapper;
 using Microsoft.Extensions.Options;
 using System;
@@ -15,6 +16,7 @@ namespace CarRental.API.DAL.DataServices.CarMaintenance
 
         private const string GetNextCarsToBeMaintained = "GetCarServiceDueDate";
         private const string SpGetCarLastServiceDate = "GetCarLastServiceDate";
+        private const string SpCreateServiceRecord = "CreateServiceRecord";
 
         public CarMaintenanceDataService(IOptions<DatabaseOptions> databaseOptions)
            : base(databaseOptions)
@@ -47,5 +49,26 @@ namespace CarRental.API.DAL.DataServices.CarMaintenance
         }
 
 
+        public async Task<IEnumerable<ServiceItem>> CreateServiceRecord(ServiceItem item)
+        {
+            using (var conn = await GetOpenConnectionAsync())
+            {
+                return await conn.QueryAsync<ServiceItem>(
+                     param: new
+                     {
+                         CarId = item.CarId,
+                         LastServiceDate = item.LastServiceDate,
+                         LastServiceMileage = item.LastServiceMileage,
+                         ServiceIntervalKm = item.ServiceIntervalKm,
+                         ServiceIntervalDate = item.ServiceIntervalDate,
+                     },
+                    sql: SpCreateServiceRecord,
+                    commandType: CommandType.StoredProcedure);
+            }
+
+        }
+
+
+
+        }
     }
-}

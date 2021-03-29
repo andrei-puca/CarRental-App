@@ -1,4 +1,5 @@
 ﻿using CarRental.API.DAL.CustomEntities;
+using CarRental.API.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,5 +12,7 @@ namespace CarRental.API.DAL.DataServices.CarMaintenance
         Task<IEnumerable<CarsToBeMaintained>> GetCarsForMaintenance();
 
         Task<IEnumerable<CarsServiceHistory>> GetCarLastServiceAsync(Guid id);
+
+        Task<IEnumerable<ServiceItem>> CreateServiceRecord(ServiceItem item);
     }
 }

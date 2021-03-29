@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using CarRental.API.BL.Models.CarMaintenance;
 using CarRental.API.BL.Services.CarMaintenance;
+using CarRental.API.DAL.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -41,5 +43,15 @@ namespace CarRental.API.Controllers
             var item = await _carMaintenanceService.GetCarLastServiceAsync(id);
             return item;
         }
+
+        [HttpPut]
+        [Route("ServiceRecord")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesDefaultResponseType]
+        public virtual async Task<IEnumerable<ServiceItem>> AddNewServiceForCar(CarNewServiceModel item)
+        {
+            return await _carMaintenanceService.CreateServiceRecord(item);
+        }
+
     }
 }

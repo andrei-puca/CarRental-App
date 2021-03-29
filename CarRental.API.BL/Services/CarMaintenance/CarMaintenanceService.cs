@@ -2,6 +2,8 @@
 using CarRental.API.BL.Models.CarMaintenance;
 using CarRental.API.DAL.CustomEntities;
 using CarRental.API.DAL.DataServices.CarMaintenance;
+using CarRental.API.DAL.Entities;
+using Nancy.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -32,6 +34,13 @@ namespace CarRental.API.BL.Services.CarMaintenance
         {
             var cars = await _carMaintenanceDataService.GetCarLastServiceAsync(id);
             return _mapper.Map<IEnumerable<CarServicesModel>>(cars);
+        }
+
+        public async Task<IEnumerable<ServiceItem>> CreateServiceRecord(CarNewServiceModel item)
+        {
+            var service = _mapper.Map<ServiceItem>(item);
+            service.LastServiceDate = service.LastServiceDate.ToLocalTime();
+            return await _carMaintenanceDataService.CreateServiceRecord(service);
         }
 
     }
