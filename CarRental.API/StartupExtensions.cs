@@ -20,6 +20,7 @@ namespace CarRental.API
         {
             //config app settings here
             services.Configure<DatabaseOptions>(configuration.GetSection("Data"));
+            services.Configure<ApiOptions>(configuration.GetSection("Data"));
         }
     }
 }

@@ -1,15 +1,20 @@
 ﻿using AutoMapper;
+using CarRental.API.BL.Helper;
 using CarRental.API.BL.Models.Clients;
 using CarRental.API.BL.Models.Prices;
 using CarRental.API.BL.Models.Reservations;
 using CarRental.API.BL.Services.Prices;
+using CarRental.API.Common.SettingsOptions;
 using CarRental.API.DAL.DataServices.Prices;
 using CarRental.API.DAL.DataServices.Reservations;
 using CarRental.API.DAL.Entities;
+using Microsoft.Extensions.Options;
+using Nancy.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace CarRental.API.BL.Services.Reservation
 {
@@ -17,17 +22,30 @@ namespace CarRental.API.BL.Services.Reservation
     {
         private readonly IMapper _mapper;
         private readonly IReservationDataService _reservationDataService;
-        public ReservationService(IMapper mapper, IReservationDataService reservationDataService)
+
+        private readonly ApiOptions _options;
+        public ReservationService(IMapper mapper, IReservationDataService reservationDataService, IOptions<ApiOptions> apiOptions)
         {
             _mapper = mapper;
             _reservationDataService = reservationDataService;
+            _options = apiOptions.Value;
         }
 
         public async Task<IEnumerable<ReservationItem>> CreateAsync(CreateReservationModel item)
         {
-            var reservation = _mapper.Map<ReservationItem>(item);
-            return await _reservationDataService.CreateAsync(reservation);
 
+            var responseString = ApiCall.GetApi("https://localhost:44310/price/GetPriceByCarId/" + item.CarId + "/" + item.RentalStartDate + "/" + item.RentalEndDate);
+            var rootobject = new JavaScriptSerializer().Deserialize<List<PriceItem>>(responseString);
+
+            foreach (var price in rootobject)
+            {
+                if (price.CarId == item.CarId)
+                    item.TotalPrice = price.Price;
+            }
+            var reservation = _mapper.Map<ReservationItem>(item);
+            reservation.RentalStartDate = reservation.RentalStartDate.ToLocalTime();
+            reservation.RentalEndDate = reservation.RentalEndDate.ToLocalTime();
+            return await _reservationDataService.CreateAsync(reservation);
         }
 
         public async Task<IEnumerable<ReservationItem>> CreateAsyncWithNewCustomer(CreateReservationWithNewClientModel item, CreateClientModel clients)
