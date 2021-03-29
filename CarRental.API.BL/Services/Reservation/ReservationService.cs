@@ -34,6 +34,9 @@ namespace CarRental.API.BL.Services.Reservation
         public async Task<IEnumerable<ReservationItem>> CreateAsync(CreateReservationModel item)
         {
 
+            item.RentalStartDate = item.RentalStartDate.ToLocalTime();
+            item.RentalEndDate = item.RentalEndDate.ToLocalTime();
+
             var responseString = ApiCall.GetApi("https://localhost:44310/price/GetPriceByCarId/" + item.CarId + "/" + item.RentalStartDate + "/" + item.RentalEndDate);
             var rootobject = new JavaScriptSerializer().Deserialize<List<PriceItem>>(responseString);
 
@@ -43,8 +46,6 @@ namespace CarRental.API.BL.Services.Reservation
                     item.TotalPrice = price.Price;
             }
             var reservation = _mapper.Map<ReservationItem>(item);
-            reservation.RentalStartDate = reservation.RentalStartDate.ToLocalTime();
-            reservation.RentalEndDate = reservation.RentalEndDate.ToLocalTime();
             return await _reservationDataService.CreateAsync(reservation);
         }
 
